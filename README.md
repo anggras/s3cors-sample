@@ -37,22 +37,37 @@ Once the virtualenv is activated, you can install the required dependencies.
 $ pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+If you do not have CDK installed, you can install it by running;
 
 ```
-$ cdk synth
+$ npm install -g aws-cdk
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+Then bootstrap CDK in your AWS account (if you have not done so).
 
-## Useful commands
+```
+$ cdk bootstrap
+```
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+Deploy the stack to setup ths S3 buckets and presigned url API gateways:
+
+```
+$ cdk deploy -O output.json
+```
+
+The stack will deploy:
+ * 3 x S3 buckets with CORS rule (allow all origin, allow origin https://test.com and allow origin http://localhost:5173 respectively)
+ * API Gateways backed with Lambda functions to generate presigned post url
+ * _output.json_ is needed by the frontend code to get presigned post url from the API 
+
+## Front End
+
+Based off Vue.js scaffolding codes, run the following to build and run the test front end.
+
+```
+$ cd frontend/s3cors
+$ npm install
+$ npm run dev
+```
 
 Enjoy!
